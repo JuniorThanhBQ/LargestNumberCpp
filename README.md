@@ -1,5 +1,8 @@
 # LargestNumberCpp
 LeetCode practice C++
+Solution: Quick Sort + String parse
+Times: 6ms (slowed)
+Cache: 14.1 (high)
 
 Given a list of non-negative integers nums, arrange them such that they form the largest number and return it.
 
