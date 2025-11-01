@@ -1,50 +1,58 @@
 ﻿#include <iostream>
 #include <vector>
 #include <string>
+#include <algorithm>
 using namespace std;
 
 class Solution {
 public:
-    void swap(vector<int>& nums, int x, int y) {
-        int temp = nums[x];
-        nums[x] = nums[y];
-        nums[y] = temp;
-    }
-
     int compareTwoNumbers(int x, int y) {
         string sx = to_string(x);
         string sy = to_string(y);
 
-        if (sx + sy > sy + sx) 
-            return 1; 
-        if (sx + sy < sy + sx) 
+        if (sx + sy > sy + sx)
             return -1; 
         return 0;
     }
 
-    void sortVector(vector<int>& nums) {
-        for (int i = 0; i < nums.size(); i++) {
-            for (int j = i + 1; j < nums.size(); j++) {
-                if (compareTwoNumbers(nums[i], nums[j]) == -1) {
-                    swap(nums, i, j);
-                }
+    int partition(vector<int>& nums, int x, int y) {
+        int pivot = nums[y];
+        int i = x - 1;
+
+        for (int j = x; j <= y-1; j++) {
+            if (compareTwoNumbers(nums[j], pivot) == -1) {
+                i++;
+                swap(nums[i], nums[j]);
             }
+        }
+
+        swap(nums[i+1],nums[y]);
+        return i + 1;
+    }
+
+    void quickSortVector(vector<int>& nums,int x, int y) {
+        if (x < y) {
+            int index = partition(nums, x, y);
+            quickSortVector(nums, x, index - 1);
+            quickSortVector(nums, index + 1, y);
         }
     }
 
     string largestNumber(vector<int>& nums) {
         string output = "";
-        sortVector(nums);
-        for (int i = 0; i < nums.size(); i++)
-            output += to_string(nums[i]);
-        if (!output.empty() && output[0] == '0')
-            output = "0";
-        return output + "\0";
+        quickSortVector(nums,0, nums.size()-1);
+
+        if (nums[0] == 0)
+            return "0";
+
+        for (int i : nums)
+            output += to_string(i);
+        return output;
     }
 };
 
 int main() {
-    vector<int> nums = {0,0};
+    vector<int> nums = {135, 247, 396, 41, 9};
     Solution leetCode;
     cout << leetCode.largestNumber(nums) << endl;
     return 1;
